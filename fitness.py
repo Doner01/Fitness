@@ -1,87 +1,99 @@
 name = input("Enter your name: ")
-weight = int(input("Enter your weight in kg: "))
-height = int(input("Enter your height in meters: "))
-age = int(input("Enter your age in years: "))
-gender = input("Enter your gender (M/F): ")
-days_exercised = int(input("Enter the number of days you exercise month: "))
-avarage_exercise_time = int(input("Enter the average time you exercise in minutes: "))
-push_ups = int(input("Enter the number of push-ups: "))
-squats = int(input("Enter the number of squats: "))
-fitness_goal = int(input("Enter your fitness goal (Weight loss/Muscle gain/General fitness): "))
+weight = float(input("Enter your weight (kg): "))
+height = float(input("Enter your height (m): "))
+age = int(input("Enter your age (years): "))
+gender = input("Enter your gender (M/F): ").upper()
+days_exercised = int(input("Days exercised in past 30 days: "))
+avg_duration = float(input("Average exercise duration per session (minutes): "))
+push_ups = int(input("Push-ups in one set: "))
+squats = int(input("Squats in one set: "))
+goal = int(input("Fitness goal (1=Weight loss, 2=Muscle gain, 3=General fitness): "))
 
-BMI = float(weight) / (float(height) ** 2)
-BMR = 10 * float(weight) + 6.25 * float(height) * 100 - 5 * float(age)
-if gender.upper() == "M":
-    BMR = 88.362 + (13.397 * float(weight)) + (4.799 * float(height) * 100) - (5.677*  float(age))
-else:
-    BMR -= 447.593 + (9.247 * float(weight)) + (3.098 * float(height) * 100) - (4.330 * float(age))
+is_male = (gender == "M")
+is_female = (gender == "F")
 
-TDEE = BMR * 1.2
+bmi = weight / (height ** 2)
+
+BMR = (
+    (is_male)   * (88.362 + (13.397 * weight) + (4.799 * height * 100) - (5.677 * age))
+    + (is_female) * (447.593 + (9.247 * weight) + (3.098 * height * 100) - (4.330 * age))
+)
+
+sedentary_TDEE = BMR * 1.2
 active_TDEE = BMR * 1.375
-exercise_frequency_percentage = (days_exercised / 30) * 100
-total_exercise_minutes = days_exercised + avarage_exercise_time
+
+exercise_frequency = (days_exercised / 30) * 100
+total_exercise_minutes = days_exercised * avg_duration
+
 fitness_score = (push_ups * 2) + (squats * 1.5)
+
 weight_loss_target = active_TDEE - 500
 muscle_gain_target = active_TDEE + 300
-general_target = active_TDEE
+maintenance_target = active_TDEE
 
-if fitness_goal == 1:
-    result = "Weight loss"
-elif fitness_goal == 2:
-    result = "Muscle gain"
-elif fitness_goal == 3:
-    result = "General fitness"
-
-if exercise_frequency_percentage >=60:
-    result1 = "Exercise frequency good"
-elif exercise_frequency_percentage >=80:
-    result1 = "Exercise frequency excellent"
-
-if push_ups >= 5.6:
-    result2_1 = "Basic push-up strength"
-elif squats >= 10.7:
-    result2_2 = "Basic squat strength"
-elif push_ups >= 10.8:
-    result2_1 = "Good push-up strength"
-elif squats >= 20:
-    result2_2 = "Good squat strength"
-
-if exercise_frequency_percentage >= 70 & avarage_exercise_time >= 30:
-    result3_1 = "Consistency strong"
-    ready1 = True
-
-if push_ups >= 5 & squats >= 10:
-    result3_2= "Basic strength present"
-    ready2 = True
-
-print(
-    f"Name: {name}\n"
-    f"Gender: {'Male' if gender == 'M' else 'Female'}\n"
-    f"Age: {age}\n"
-    "Physical measurements\n"
-    f"Weight: {weight}\n"
-    f"Height: {height}\n"
-    f"BMI: {BMI}\n"
-    "Metabolic calculations\n"
-    f"BMR: {BMR}\n"
-    f"TDEE: {TDEE}\n"
-    f"active_TDEE: {active_TDEE}\n"
-    "Monthly exercise statistics\n"
-    f"Days exercised: {days_exercised}\n"
-    f"Exercise frequency percentage: {exercise_frequency_percentage}\n"
-    f"Average duration per session: {avarage_exercise_time}\n"
-    f"Total exercise minutes in month: {total_exercise_minutes}\n"
-    "Strength assessment\n"
-    f"Push-ups in one set: {push_ups}\n"
-    f"Squats in one set: {squats}\n"
-    f"Fitness score: {fitness_score}\n"
-    "Calorie targets for all three goals\n"
-    f"Weight loss target: {weight_loss_target}\n"
-    f"Muscle gain target: {muscle_gain_target}\n"
-    f"General fitness target: {general_target}\n"
-    f"Fitness goal selected: {result}\n"
+calorie_target = (
+    (goal == 1) * weight_loss_target +
+    (goal == 2) * muscle_gain_target +
+    (goal == 3) * maintenance_target
 )
-    
 
+bmi_reasonable = 18.5 <= bmi < 30
+exercise_freq_good = exercise_frequency >= 60
+exercise_freq_excellent = exercise_frequency >= 80
+exercise_duration_adequate = avg_duration >= 30
 
+basic_pushup_strength = push_ups >= 5
+basic_squat_strength = squats >= 10
+good_pushup_strength = push_ups >= 10
+good_squat_strength = squats >= 20
 
+consistency_strong = exercise_frequency >= 70 and avg_duration >= 30
+basic_strength_present = push_ups >= 5 and squats >= 10
+ready_for_progression = consistency_strong and basic_strength_present
+
+print("\n--- BEGINNER FITNESS PROFILE ---")
+print(f"Name: {name}")
+print(f"Gender: {gender}")
+print(f"Age: {age}")
+
+print("\n--- Physical Measurements ---")
+print(f"Weight: {weight} kg")
+print(f"Height: {height} m")
+print(f"BMI: {bmi:.2f}")
+
+print("\n--- Metabolic Calculations ---")
+print(f"BMR: {BMR:.2f}")
+print(f"Sedentary TDEE: {sedentary_TDEE:.2f}")
+print(f"Active TDEE: {active_TDEE:.2f}")
+
+print("\n--- Monthly Exercise Statistics ---")
+print(f"Days exercised (out of 30): {days_exercised}")
+print(f"Exercise frequency: {exercise_frequency:.1f}%")
+print(f"Average duration per session: {avg_duration} min")
+print(f"Total exercise minutes in month: {total_exercise_minutes} min")
+
+print("\n--- Strength Assessment ---")
+print(f"Push-ups in one set: {push_ups}")
+print(f"Squats in one set: {squats}")
+print(f"Fitness score: {fitness_score:.1f}")
+
+print("\n--- Calorie Targets ---")
+print(f"Weight Loss Target: {weight_loss_target}")
+print(f"Muscle Gain Target: {muscle_gain_target}")
+print(f"General Fitness Target: {maintenance_target}")
+print(f"Selected Goal: {goal} → Target: {calorie_target}")
+
+print("\n--- Progress Indicators ---")
+print(f"1. BMI in reasonable range: {bmi_reasonable}")
+print(f"2. Exercise frequency good: {exercise_freq_good}")
+print(f"3. Exercise frequency excellent: {exercise_freq_excellent}")
+print(f"4. Exercise duration adequate: {exercise_duration_adequate}")
+print(f"5. Basic push-up strength: {basic_pushup_strength}")
+print(f"6. Basic squat strength: {basic_squat_strength}")
+print(f"7. Good push-up strength: {good_pushup_strength}")
+print(f"8. Good squat strength: {good_squat_strength}")
+print(f"9. Consistency strong: {consistency_strong}")
+print(f"10. Basic strength present: {basic_strength_present}")
+print(f"11. Ready for progression: {ready_for_progression}")
+
+# Please I tried my best I don't know if there any way😥(if is best option for this)

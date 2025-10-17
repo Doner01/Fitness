@@ -96,4 +96,4 @@ print(f"9. Consistency strong: {consistency_strong}")
 print(f"10. Basic strength present: {basic_strength_present}")
 print(f"11. Ready for progression: {ready_for_progression}")
 
-# Please I tried my best I don't know if there any way😥(if is best option for this)
+# Please I tried my best I don't know if there any way😥(if is best option for this)😊
